@@ -48,23 +48,23 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => {
-  console.log("One client connected");
   let roomId;
   socket.on("join", async (data) => {
     const { room } = data;
-    const { newRoom } = await joinRoom(room);
-    if (newRoom) roomId = newRoom._id
+    const result = await joinRoom(room);
+    if (result && result.newRoom) {
+      roomId = result.newRoom._id;
+      const newRoom = result.newRoom
     
-    socket.join(newRoom.name);
+      socket.join(newRoom.name);
+    }
+    
   });
 
   socket.on("send-chat", async (data) => {
-    console.log(data, "the data")
-    // const { chat, room, username } = data;
     
     const chat = await newChat(data);
     const message = chat.message
-    console.log(chat, " the new created chat")
     io.to(data.room).emit("message", message);
   });
   socket.on("disconnect", async() => {

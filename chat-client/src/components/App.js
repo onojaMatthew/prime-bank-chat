@@ -24,23 +24,20 @@ const App = () => {
 
 
   const handleChat = () => {
-    console.log("insiide handle chat")
-    socket.current.emit("send-chat", { chat, username, room }, () => setChat(""))
+    socket.current.emit("send-chat", { chat, username, room }, () =>{ setChat("")})
   }
 
   useEffect(() => {
     socket.current.on("message", (message) => {
+      console.log(message, " the new message")
       setMessages([...messages, message ]);
     });
   }, [ messages ]);
 
-  console.log(messages, " this is the message list")
   return (
     <div className="App" style={{ marginTop: "30%"}}>
       <h1>React chat application</h1>
-      {/* {messages.map(message => (
-        <p key={message._id}>{message}</p>
-      ))} */}
+      {messages.map(message => (<p key={message._id}>{message.message}</p>))}
       <input type="text" value={chat} onChange={(e) => setChat(e.target.value)} style={{  height: "50px"}} />
       <button onClick={handleChat} style={{ background: "black", color: "white", height: "55px"}}>Send a chat</button>
     </div>

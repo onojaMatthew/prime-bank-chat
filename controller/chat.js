@@ -1,12 +1,10 @@
 import Chat from "../model/chat.js";
 
 export const newChat = async (data) => {
-  console.log(data, " inside chat controller")
   if (!data) return { error: "Either message or room name or username not provided" };
   try {
 
     let newChat = new Chat({ message: data.chat, room: data.room, username: data.username });
-    console.log(newChat, "the new chat")
     newChat = await newChat.save();
     return { message: newChat };
   } catch (error) {
